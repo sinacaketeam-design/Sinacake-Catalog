@@ -8,19 +8,18 @@
     <!-- Memuat Tailwind CSS untuk styling -->
     <script src="https://cdn.tailwindcss.com"></script>
     
-    <!-- Memuat Font Quicksand agar tulisan terlihat bulat dan lucu -->
+    <!-- Memuat Font Quicksand -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
     
-    <!-- Memuat FontAwesome untuk ikon-ikon (lokasi, WA, IG, Share) -->
+    <!-- Memuat FontAwesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
     <style>
         body {
             font-family: 'Quicksand', sans-serif;
             background-color: #ffffff;
-            /* Polkadot Pattern Pink dengan opacity 15% */
             background-image: 
                 radial-gradient(rgba(255, 105, 180, 0.15) 15%, transparent 15%),
                 radial-gradient(rgba(255, 105, 180, 0.15) 15%, transparent 15%);
@@ -28,19 +27,17 @@
             background-position: 0 0, 15px 15px;
         }
 
-        /* Container utama ala HP */
         .mobile-container {
             max-width: 480px;
             margin: 0 auto;
             min-height: 100vh;
-            background: rgba(255, 255, 255, 0.85); /* Semi transparan agar polkadot tembus sedikit */
+            background: rgba(255, 255, 255, 0.85);
             backdrop-filter: blur(2px);
             box-shadow: 0 0 20px rgba(0,0,0,0.08);
             position: relative;
             overflow-x: hidden;
         }
 
-        /* Animasi Mengambang untuk Header */
         @keyframes float {
             0% { transform: translateY(0px); }
             50% { transform: translateY(-8px); }
@@ -50,7 +47,6 @@
             animation: float 3s ease-in-out infinite;
         }
 
-        /* Style khusus tombol agar terlihat membal/3D */
         .btn-bouncy {
             transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
         }
@@ -59,7 +55,6 @@
             box-shadow: 0 0px 0 transparent !important;
         }
 
-        /* Animasi Pop-in untuk Modal/Pop-up */
         @keyframes popIn {
             0% { transform: scale(0.8); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -67,6 +62,17 @@
         .modal-animate {
             animation: popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
         }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+        .animate-shake { animation: shake 0.3s ease-in-out 2; }
+        
+        /* Hilangkan scrollbar untuk tampilan lebih bersih di modal */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="text-gray-700 antialiased selection:bg-pink-300 selection:text-white">
@@ -82,9 +88,11 @@
 
         <!-- Header Profil -->
         <div class="px-6 mb-8 animate-float flex flex-col items-center text-center">
-            <!-- Ikon/Logo Kue -->
-            <div class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center border-4 border-white shadow-lg mb-4 overflow-hidden">
-                <img src="https://i.ibb.co.com/S70RV5Nh/SINACAKE-LOGO-BULET-01.jpg" alt="SINACAKE-LOGO-BULET-01" class="w-full h-full object-cover" border="0">
+            <!-- Ikon/Logo Kue (Fitur Rahasia: Klik 5x) -->
+            <div onclick="handleLogoClick()" class="w-24 h-24 bg-pink-100 rounded-full flex items-center justify-center border-4 border-white shadow-lg mb-4 overflow-hidden cursor-pointer relative group">
+                <img src="https://i.ibb.co.com/S70RV5Nh/SINACAKE-LOGO-BULET-01.jpg" alt="Sina Cake Logo" class="w-full h-full object-cover" border="0">
+                <!-- Indikator klik samar -->
+                <div id="clickIndicator" class="absolute inset-0 bg-white/30 hidden"></div>
             </div>
             
             <h1 class="text-2xl font-bold text-pink-500 mb-1">Sina Cake</h1>
@@ -106,22 +114,22 @@
         <div class="px-5 flex flex-col gap-3">
             
             <!-- 1. Custom Cake -->
-            <button onclick="openModal('branchModal', 'custom')" class="btn-bouncy w-full bg-pink-500 text-white border-2 border-pink-500 shadow-[0_5px_0_#d81b60] py-3.5 px-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:-translate-y-1">
+            <button onclick="trackClick('Tombol Custom Cake'); openModal('branchModal', 'custom')" class="btn-bouncy w-full bg-pink-500 text-white border-2 border-pink-500 shadow-[0_5px_0_#d81b60] py-3.5 px-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:-translate-y-1">
                 <i class="fa-solid fa-wand-magic-sparkles"></i> ORDER KUE CUSTOM? KLIK DISINI
             </button>
 
             <!-- 2. Ready Cake -->
-            <button onclick="openModal('branchModal', 'ready')" class="btn-bouncy w-full bg-pink-400 text-white border-2 border-pink-400 shadow-[0_5px_0_#c2185b] py-3.5 px-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:-translate-y-1">
+            <button onclick="trackClick('Tombol Ready Cake'); openModal('branchModal', 'ready')" class="btn-bouncy w-full bg-pink-400 text-white border-2 border-pink-400 shadow-[0_5px_0_#c2185b] py-3.5 px-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:-translate-y-1">
                 <i class="fa-solid fa-cake-candles"></i> ORDER KUE READY? KLIK DISINI
             </button>
 
             <!-- 3. Contoh Kue (Drive) -->
-            <a href="https://drive.google.com/drive/folders/1uhUuLrEPrOfSXEmbCaLWEhqaW6GjWgfx?usp=sharing" target="_blank" class="btn-bouncy w-full bg-white text-pink-600 border-2 border-pink-200 shadow-[0_5px_0_#fbcfe8] py-3.5 px-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:-translate-y-1">
+            <a href="https://drive.google.com/drive/folders/1uhUuLrEPrOfSXEmbCaLWEhqaW6GjWgfx?usp=sharing" target="_blank" onclick="trackClick('Tombol Contoh Kue (Drive)')" class="btn-bouncy w-full bg-white text-pink-600 border-2 border-pink-200 shadow-[0_5px_0_#fbcfe8] py-3.5 px-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:-translate-y-1">
                 <i class="fa-solid fa-images"></i> CONTOH KUE
             </a>
 
             <!-- 4. FAQ -->
-            <button onclick="openModal('faqModal')" class="btn-bouncy w-full bg-white text-pink-600 border-2 border-pink-200 shadow-[0_5px_0_#fbcfe8] py-3.5 px-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:-translate-y-1">
+            <button onclick="trackClick('Tombol FAQ'); openModal('faqModal')" class="btn-bouncy w-full bg-white text-pink-600 border-2 border-pink-200 shadow-[0_5px_0_#fbcfe8] py-3.5 px-4 rounded-full font-bold text-sm flex items-center justify-center gap-2 hover:-translate-y-1">
                 <i class="fa-solid fa-circle-question"></i> FAQ SINACAKE
             </button>
 
@@ -129,38 +137,33 @@
                 <span class="bg-[#fcf8fa] px-3 text-xs font-bold text-pink-400 tracking-wider uppercase">Lokasi Kami</span>
             </div>
 
-            <!-- 5. Cabang Krendang -->
-            <a href="https://maps.app.goo.gl/EcXvQB8Ya7r59FPu8" target="_blank" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
+            <!-- Cabang Maps -->
+            <a href="https://maps.app.goo.gl/EcXvQB8Ya7r59FPu8" target="_blank" onclick="trackClick('Maps - Krendang')" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
                 <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-location-dot"></i></div>
                 <span class="text-left leading-tight">Sina Cake Krendang - Jakarta Barat</span>
             </a>
 
-            <!-- 6. Cabang Jembatan Besi -->
-            <a href="https://maps.app.goo.gl/k28NYvMjTn6oip5o6" target="_blank" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
+            <a href="https://maps.app.goo.gl/k28NYvMjTn6oip5o6" target="_blank" onclick="trackClick('Maps - Jembatan Besi')" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
                 <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-location-dot"></i></div>
                 <span class="text-left leading-tight">Sina Cake Express Jembatan Besi - Jakarta Barat</span>
             </a>
 
-            <!-- 7. Cabang Jelambar -->
-            <a href="https://maps.app.goo.gl/CLqK3x2TsBgaS5UL9" target="_blank" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
+            <a href="https://maps.app.goo.gl/CLqK3x2TsBgaS5UL9" target="_blank" onclick="trackClick('Maps - Jelambar')" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
                 <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-location-dot"></i></div>
                 <span class="text-left leading-tight">Sina Cake Jelambar - Jakarta Barat</span>
             </a>
 
-            <!-- 8. Cabang Tanah Pasir -->
-            <a href="https://maps.app.goo.gl/QBiadGLgyNxrJepN9" target="_blank" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
+            <a href="https://maps.app.goo.gl/QBiadGLgyNxrJepN9" target="_blank" onclick="trackClick('Maps - Tanah Pasir')" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
                 <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-location-dot"></i></div>
                 <span class="text-left leading-tight">Sina Cake Tanah Pasir - Jakarta Utara</span>
             </a>
 
-            <!-- 9. Cabang Pademangan -->
-            <a href="https://maps.app.goo.gl/hd9Brj2L5MDBYrZ86" target="_blank" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
+            <a href="https://maps.app.goo.gl/hd9Brj2L5MDBYrZ86" target="_blank" onclick="trackClick('Maps - Pademangan')" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
                 <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-location-dot"></i></div>
                 <span class="text-left leading-tight">Sina Cake Pademangan - Jakarta Utara</span>
             </a>
 
-            <!-- 10. Cabang Bekasi -->
-            <a href="https://maps.app.goo.gl/3UM4eKeTamB9zsTM9" target="_blank" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
+            <a href="https://maps.app.goo.gl/3UM4eKeTamB9zsTM9" target="_blank" onclick="trackClick('Maps - Bekasi')" class="btn-bouncy w-full bg-white text-gray-600 border-2 border-gray-100 shadow-[0_4px_0_#f3f4f6] py-3 px-4 rounded-xl font-bold text-sm flex items-center justify-start gap-3 hover:-translate-y-1">
                 <div class="w-8 h-8 rounded-full bg-pink-100 text-pink-500 flex items-center justify-center"><i class="fa-solid fa-location-dot"></i></div>
                 <span class="text-left leading-tight">Sina Cake Perumnas - Bekasi</span>
             </a>
@@ -169,10 +172,10 @@
 
         <!-- Sosial Media Bawah -->
         <div class="mt-10 flex justify-center gap-6">
-            <a href="https://instagram.com/sinacake" target="_blank" class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-pink-500 text-3xl shadow-[0_4px_0_#f3f4f6] border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
+            <a href="https://instagram.com/sinacake" target="_blank" onclick="trackClick('Sosmed - Instagram')" class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-pink-500 text-3xl shadow-[0_4px_0_#f3f4f6] border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
                 <i class="fa-brands fa-instagram"></i>
             </a>
-            <button onclick="openModal('branchModal', 'tanya')" class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-green-500 text-3xl shadow-[0_4px_0_#f3f4f6] border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
+            <button onclick="trackClick('Tombol WA (Bawah)'); openModal('branchModal', 'tanya')" class="w-14 h-14 bg-white rounded-full flex items-center justify-center text-green-500 text-3xl shadow-[0_4px_0_#f3f4f6] border border-gray-100 hover:-translate-y-2 transition-transform duration-300">
                 <i class="fa-brands fa-whatsapp"></i>
             </button>
         </div>
@@ -182,8 +185,7 @@
     <!-- MODAL WA CABANG -->
     <div id="branchModal" class="fixed inset-0 z-50 hidden items-center justify-center px-4 bg-black/40 backdrop-blur-sm">
         <div class="bg-white w-full max-w-[360px] rounded-3xl p-5 relative shadow-2xl modal-animate border-4 border-pink-100">
-            <!-- Tombol Close -->
-            <button onclick="closeModal('branchModal')" class="absolute -top-3 -right-3 w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold shadow-lg hover:bg-gray-700">
+            <button onclick="closeModal('branchModal')" class="absolute -top-3 -right-3 w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold shadow-lg hover:bg-gray-700 z-10">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             
@@ -195,7 +197,7 @@
                 <p class="text-xs text-gray-500 mt-1">Pilih cabang tujuan untuk melanjutkan obrolan via WhatsApp.</p>
             </div>
 
-            <div class="flex flex-col gap-2 max-h-[50vh] overflow-y-auto pr-1 pb-1" id="branchListContainer">
+            <div class="flex flex-col gap-2 max-h-[50vh] overflow-y-auto pr-1 pb-1 no-scrollbar" id="branchListContainer">
                 <!-- Tombol cabang akan di-inject lewat Javascript -->
             </div>
         </div>
@@ -203,9 +205,8 @@
 
     <!-- MODAL FAQ -->
     <div id="faqModal" class="fixed inset-0 z-50 hidden items-center justify-center px-4 bg-black/40 backdrop-blur-sm">
-        <div class="bg-white w-full max-w-[400px] rounded-3xl p-6 relative shadow-2xl modal-animate border-4 border-pink-100 max-h-[85vh] overflow-y-auto">
-            <!-- Tombol Close -->
-            <button onclick="closeModal('faqModal')" class="absolute -top-3 -right-3 w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold shadow-lg hover:bg-gray-700">
+        <div class="bg-white w-full max-w-[400px] rounded-3xl p-6 relative shadow-2xl modal-animate border-4 border-pink-100 max-h-[85vh] overflow-y-auto no-scrollbar">
+            <button onclick="closeModal('faqModal')" class="absolute -top-3 -right-3 w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold shadow-lg hover:bg-gray-700 z-10">
                 <i class="fa-solid fa-xmark"></i>
             </button>
             
@@ -218,27 +219,22 @@
             </div>
             
             <div class="flex flex-col gap-4 text-left">
-                <!-- Item FAQ 1 -->
                 <div class="border-b border-pink-100 pb-4">
                     <div class="font-bold text-pink-500 text-sm mb-1">Q: Bagaimana jam operasional Sina Cake?</div>
                     <div class="text-sm text-gray-600 leading-relaxed">A: Sina Cake beroperasi setiap hari mulai pukul 08.00 hingga 00.00 WIB. Khusus untuk Cabang Krendang, jam operasional berakhir pada pukul 22.00 WIB.</div>
                 </div>
-                <!-- Item FAQ 2 -->
                 <div class="border-b border-pink-100 pb-4">
                     <div class="font-bold text-pink-500 text-sm mb-1">Q: Bagaimana cara memesan kue custom?</div>
                     <div class="text-sm text-gray-600 leading-relaxed">A: Anda dapat menyiapkan gambar atau foto referensi kue yang diinginkan, kemudian kirimkan ke admin WhatsApp cabang terdekat kami untuk proses konfirmasi detail dan harga.</div>
                 </div>
-                <!-- Item FAQ 3 -->
                 <div class="border-b border-pink-100 pb-4">
                     <div class="font-bold text-pink-500 text-sm mb-1">Q: Kapan waktu terbaik untuk memesan kue custom?</div>
                     <div class="text-sm text-gray-600 leading-relaxed">A: Untuk memastikan ketersediaan slot dan hasil yang maksimal, kami menyarankan Anda untuk melakukan pemesanan minimal H-2 atau H-3 sebelum hari pengiriman.</div>
                 </div>
-                <!-- Item FAQ 4 -->
                 <div class="border-b border-pink-100 pb-4">
                     <div class="font-bold text-pink-500 text-sm mb-1">Q: Apakah tersedia layanan pengiriman ke rumah?</div>
                     <div class="text-sm text-gray-600 leading-relaxed">A: Tentu. Untuk menjaga kualitas dan bentuk kue tetap aman selama perjalanan, kami sangat menyarankan penggunaan layanan kurir instan mobil (seperti GrabCar/GoCar).</div>
                 </div>
-                <!-- Item FAQ 5 -->
                 <div>
                     <div class="font-bold text-pink-500 text-sm mb-1">Q: Berapa lama ketahanan kue Sina Cake?</div>
                     <div class="text-sm text-gray-600 leading-relaxed">A: Kue kami dapat bertahan selama kurang lebih 24 jam di suhu ruang. Untuk penyimpanan yang lebih lama, Anda dapat menyimpannya di dalam lemari pendingin (kulkas) agar bertahan hingga 3-4 hari.</div>
@@ -247,8 +243,149 @@
         </div>
     </div>
 
-    <script>
-        // Data Kontak Cabang
+    <!-- MODAL AUTH ADMIN (PASSWORD) -->
+    <div id="adminAuthModal" class="fixed inset-0 z-[60] hidden items-center justify-center px-4 bg-black/60 backdrop-blur-md">
+        <div class="bg-white w-full max-w-[320px] rounded-3xl p-6 relative shadow-2xl modal-animate border-4 border-pink-500 text-center">
+            <button onclick="closeModal('adminAuthModal')" class="absolute -top-3 -right-3 w-8 h-8 bg-gray-800 text-white rounded-full flex items-center justify-center font-bold shadow-lg hover:bg-gray-700 z-10">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+            <div class="w-12 h-12 bg-gray-100 text-gray-800 rounded-full flex items-center justify-center text-xl mx-auto mb-4 border-2 border-gray-200">
+                <i class="fa-solid fa-lock"></i>
+            </div>
+            <h3 class="font-bold text-xl text-gray-800 mb-1">Akses Admin</h3>
+            <p class="text-xs text-gray-500 mb-5">Masukkan password untuk melihat analitik klik pengunjung.</p>
+            
+            <input type="password" id="adminPassword" placeholder="***" class="w-full border-2 border-pink-200 rounded-xl px-4 py-3 mb-4 text-center text-lg tracking-widest focus:outline-none focus:border-pink-500 focus:ring-2 focus:ring-pink-200 transition-all">
+            
+            <button onclick="checkAdminPassword()" class="w-full bg-pink-500 hover:bg-pink-600 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition-colors">
+                Masuk
+            </button>
+        </div>
+    </div>
+
+    <!-- DASHBOARD ADMIN (FULLSCREEN) -->
+    <div id="adminDashboardModal" class="fixed inset-0 z-[70] hidden flex-col bg-gray-50 overflow-y-auto">
+        <!-- Header Dasbor -->
+        <div class="bg-pink-500 text-white px-5 py-4 flex justify-between items-center sticky top-0 z-10 shadow-md">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-chart-pie text-xl"></i>
+                <h2 class="font-bold text-lg leading-none">Dasbor Admin</h2>
+            </div>
+            <button onclick="closeModal('adminDashboardModal')" class="bg-white/20 hover:bg-white/30 px-3 py-1.5 rounded-lg text-sm font-bold transition-colors">Tutup</button>
+        </div>
+
+        <div class="p-5 max-w-3xl mx-auto w-full">
+            <p class="text-sm text-gray-500 mb-4">Pantau data klik yang dilakukan oleh pelanggan pada link in bio ini.</p>
+            
+            <!-- Filter Tanggal -->
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-gray-100 mb-5">
+                <h3 class="font-bold text-gray-700 mb-3 flex items-center gap-2"><i class="fa-regular fa-calendar"></i> Filter Tanggal</h3>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <div class="flex-1">
+                        <label class="text-xs text-gray-500 font-bold ml-1">Dari Tanggal:</label>
+                        <input type="date" id="filterStartDate" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-pink-400">
+                    </div>
+                    <div class="flex-1">
+                        <label class="text-xs text-gray-500 font-bold ml-1">Sampai Tanggal:</label>
+                        <input type="date" id="filterEndDate" class="w-full border border-gray-200 rounded-xl px-3 py-2 text-sm focus:outline-none focus:border-pink-400">
+                    </div>
+                    <div class="flex items-end">
+                        <button onclick="applyDashboardFilter()" class="w-full sm:w-auto bg-pink-500 hover:bg-pink-600 text-white px-6 py-2.5 rounded-xl font-bold text-sm transition-colors flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-magnifying-glass"></i> Cari
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kartu Statistik -->
+            <div class="grid grid-cols-2 gap-4 mb-5" id="statsCardsContainer">
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-pink-100 flex flex-col items-center justify-center">
+                    <span class="text-xs text-gray-500 font-bold mb-1 uppercase tracking-wide">Total Semua Klik</span>
+                    <span class="text-4xl font-bold text-pink-500" id="statTotalClicks">-</span>
+                </div>
+                <div class="bg-white p-5 rounded-2xl shadow-sm border border-pink-100 flex flex-col items-center justify-center">
+                    <span class="text-xs text-gray-500 font-bold mb-1 uppercase tracking-wide">Tombol Berbeda</span>
+                    <span class="text-4xl font-bold text-pink-500" id="statTotalButtons">-</span>
+                </div>
+            </div>
+
+            <!-- Tabel Detail -->
+            <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden mb-8">
+                <div class="bg-pink-50 px-5 py-3 font-bold text-pink-600 text-sm border-b border-pink-100 flex items-center justify-between">
+                    <span>Detail Klik per Tombol</span>
+                    <i class="fa-solid fa-list-ul"></i>
+                </div>
+                <div id="statsListContainer" class="divide-y divide-gray-100">
+                    <div class="p-8 text-center text-gray-400 text-sm flex flex-col items-center">
+                        <i class="fa-solid fa-circle-notch fa-spin text-2xl mb-2 text-pink-300"></i>
+                        Memuat data...
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- SCRIPT UTAMA & FIREBASE (Integrasi Real Database) -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Variabel Database Global
+        let db = null;
+        let auth = null;
+        let currentUser = null;
+        let allClicksData = []; 
+        let isFetching = false;
+        
+        // Setup ID App Firebase
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'sinacake-bio-v1';
+        
+        // Inisialisasi Firebase (jika config tersedia dari environment)
+        const firebaseConfigStr = typeof __firebase_config !== 'undefined' ? __firebase_config : null;
+        if (firebaseConfigStr) {
+            try {
+                const firebaseConfig = JSON.parse(firebaseConfigStr);
+                const app = initializeApp(firebaseConfig);
+                auth = getAuth(app);
+                db = getFirestore(app);
+
+                const initAuth = async () => {
+                    if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
+                        await signInWithCustomToken(auth, __initial_auth_token);
+                    } else {
+                        await signInAnonymously(auth);
+                    }
+                };
+                initAuth();
+                
+                onAuthStateChanged(auth, user => {
+                    currentUser = user;
+                });
+            } catch (e) {
+                console.error("Gagal menginisialisasi Firebase:", e);
+            }
+        }
+
+        // --- SISTEM PELACAKAN (TRACKING) ---
+        window.trackClick = async function(buttonName) {
+            // Mencatat event ke console browser
+            console.log("Track Click:", buttonName);
+            
+            // Simpan ke database jika sudah terkoneksi
+            if (!currentUser || !db) return;
+            try {
+                const clicksRef = collection(db, 'artifacts', appId, 'public', 'data', 'clicks');
+                await addDoc(clicksRef, {
+                    buttonName: buttonName,
+                    timestamp: Date.now()
+                });
+            } catch (error) {
+                console.error("Gagal menyimpan klik:", error);
+            }
+        };
+
+        // --- DATA CABANG ---
         const branches = [
             { name: 'Cabang Krendang', phone: '62811870139' },
             { name: 'Cabang Jelambar', phone: '62819858385' },
@@ -260,8 +397,8 @@
 
         let currentOrderType = '';
 
-        // Render Tombol Cabang
-        function renderBranchButtons() {
+        // --- FUNGSI TAMPILAN UTAMA ---
+        window.renderBranchButtons = function() {
             const container = document.getElementById('branchListContainer');
             container.innerHTML = '';
             
@@ -269,33 +406,30 @@
                 const btn = document.createElement('button');
                 btn.className = 'w-full bg-pink-50 hover:bg-pink-500 text-pink-600 hover:text-white font-bold py-3 px-4 rounded-xl text-sm transition-colors text-left flex justify-between items-center border border-pink-100';
                 btn.innerHTML = `<span>📍 ${branch.name}</span> <i class="fa-solid fa-chevron-right text-xs opacity-70"></i>`;
-                btn.onclick = () => sendToWhatsApp(branch.phone, branch.name);
+                btn.onclick = () => {
+                    window.trackClick('WA - ' + branch.name);
+                    window.sendToWhatsApp(branch.phone, branch.name);
+                };
                 container.appendChild(btn);
             });
-        }
+        };
         
-        // Panggil render saat awal load
-        renderBranchButtons();
-
-        // Buka Pop-up (Modal)
-        function openModal(modalId, orderType = '') {
+        window.openModal = function(modalId, orderType = '') {
             if (modalId === 'branchModal') {
                 currentOrderType = orderType;
             }
             const modal = document.getElementById(modalId);
             modal.classList.remove('hidden');
             modal.classList.add('flex');
-        }
+        };
 
-        // Tutup Pop-up (Modal)
-        function closeModal(modalId) {
+        window.closeModal = function(modalId) {
             const modal = document.getElementById(modalId);
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-        }
+        };
 
-        // Redirect ke WhatsApp dengan Pesan Otomatis
-        function sendToWhatsApp(phone, branchName) {
+        window.sendToWhatsApp = function(phone, branchName) {
             let message = '';
             if (currentOrderType === 'custom') {
                 message = `Halo Admin Sina Cake ${branchName}, saya ingin bertanya mengenai pemesanan Custom Cake.`;
@@ -307,15 +441,13 @@
 
             const encodedMessage = encodeURIComponent(message);
             const waLink = `https://wa.me/${phone}?text=${encodedMessage}`;
-            
-            // Buka tab WA
             window.open(waLink, '_blank');
-            closeModal('branchModal');
-        }
+            window.closeModal('branchModal');
+        };
 
-        // Fitur Bagikan Website
-        function shareWebsite() {
-            const targetUrl = 'https://sinacaketeam-design.github.io/Link-Bio/';
+        window.shareWebsite = function() {
+            window.trackClick('Tombol Share Web');
+            const targetUrl = window.location.href; // Akan membagikan url aktif
             const shareData = {
                 title: 'Sina Cake | Link in Bio',
                 text: 'Kue Ulang Tahun Jakarta Bekasi. Makanan & Minuman Cake Spesialist! 🎂',
@@ -323,11 +455,8 @@
             };
 
             if (navigator.share) {
-                navigator.share(shareData)
-                    .then(() => console.log('Sukses membagikan web'))
-                    .catch((err) => console.log('Gagal membagikan:', err));
+                navigator.share(shareData).catch((err) => console.log('Batal membagikan'));
             } else {
-                // Fallback untuk browser PC lama (Copy URL)
                 const dummy = document.createElement('input');
                 document.body.appendChild(dummy);
                 dummy.value = targetUrl;
@@ -335,28 +464,166 @@
                 document.execCommand('copy');
                 document.body.removeChild(dummy);
                 
-                // Pesan Pop-up
                 const popup = document.createElement('div');
-                popup.innerText = "Link berhasil disalin ke clipboard!";
-                popup.className = "fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg text-sm z-50 modal-animate";
+                popup.innerText = "Link berhasil disalin!";
+                popup.className = "fixed bottom-10 left-1/2 transform -translate-x-1/2 bg-gray-800 text-white px-4 py-2 rounded-lg text-sm z-50 modal-animate shadow-lg";
                 document.body.appendChild(popup);
-                
                 setTimeout(() => { popup.remove(); }, 3000);
             }
+        };
+
+        // --- SISTEM ADMIN RAHASIA (EASTER EGG) ---
+        let logoClicks = 0;
+        let logoClickTimer;
+
+        window.handleLogoClick = function() {
+            // Animasi klik visual kecil
+            const indicator = document.getElementById('clickIndicator');
+            indicator.classList.remove('hidden');
+            setTimeout(() => indicator.classList.add('hidden'), 100);
+
+            logoClicks++;
+            clearTimeout(logoClickTimer);
+            
+            // Reset jumlah klik jika tidak diklik lagi dalam 2 detik
+            logoClickTimer = setTimeout(() => { logoClicks = 0; }, 2000); 
+
+            if (logoClicks >= 5) {
+                logoClicks = 0; // Reset
+                window.trackClick('Akses Admin Dibuka');
+                document.getElementById('adminPassword').value = ''; // bersihkan field
+                window.openModal('adminAuthModal');
+            }
+        };
+
+        window.checkAdminPassword = function() {
+            const input = document.getElementById('adminPassword');
+            if (input.value === 'Admin') {
+                input.value = '';
+                window.closeModal('adminAuthModal');
+                window.openAdminDashboard();
+            } else {
+                // Animasi getar saat salah password
+                input.classList.add('border-red-500', 'animate-shake');
+                input.value = '';
+                setTimeout(() => {
+                    input.classList.remove('border-red-500', 'animate-shake');
+                }, 400);
+            }
+        };
+
+        // --- DASBOR ADMIN ---
+        window.openAdminDashboard = function() {
+            window.openModal('adminDashboardModal');
+            
+            // Atur default filter ke bulan ini
+            const today = new Date();
+            const firstDayOfMonth = new Date(today.getFullYear(), today.getMonth(), 1);
+            
+            // Format YYYY-MM-DD untuk input date
+            document.getElementById('filterStartDate').value = firstDayOfMonth.toISOString().split('T')[0];
+            document.getElementById('filterEndDate').value = today.toISOString().split('T')[0];
+
+            fetchDatabaseClicks();
+        };
+
+        function fetchDatabaseClicks() {
+            if (!currentUser || !db) {
+                document.getElementById('statsListContainer').innerHTML = `
+                    <div class="p-8 text-center text-gray-500 text-sm">
+                        <i class="fa-solid fa-triangle-exclamation text-3xl mb-3 text-orange-400"></i><br>
+                        Database belum aktif. Coba beberapa saat lagi atau pastikan koneksi internet lancar.
+                    </div>
+                `;
+                return;
+            }
+
+            if (isFetching) return;
+            isFetching = true;
+
+            const clicksRef = collection(db, 'artifacts', appId, 'public', 'data', 'clicks');
+            
+            // Dengarkan perubahan database (Realtime)
+            onSnapshot(clicksRef, (snapshot) => {
+                allClicksData = [];
+                snapshot.forEach(doc => {
+                    allClicksData.push({ id: doc.id, ...doc.data() });
+                });
+                window.applyDashboardFilter(); // Terapkan filter otomatis
+                isFetching = false;
+            }, (error) => {
+                console.error("Gagal mengambil data dari database:", error);
+                isFetching = false;
+            });
         }
 
-        // Tutup Modal jika area gelap di luar modal di-klik
-        window.onclick = function(event) {
-            const branchModal = document.getElementById('branchModal');
-            const faqModal = document.getElementById('faqModal');
+        window.applyDashboardFilter = function() {
+            const startDateStr = document.getElementById('filterStartDate').value;
+            const endDateStr = document.getElementById('filterEndDate').value;
             
-            if (event.target === branchModal) {
-                closeModal('branchModal');
+            let filteredData = allClicksData;
+            
+            if (startDateStr && endDateStr) {
+                const start = new Date(startDateStr + "T00:00:00").getTime();
+                const end = new Date(endDateStr + "T23:59:59").getTime();
+
+                filteredData = allClicksData.filter(item => {
+                    return item.timestamp >= start && item.timestamp <= end;
+                });
             }
-            if (event.target === faqModal) {
-                closeModal('faqModal');
+
+            // Hitung statistik (Agregasi)
+            const counts = {};
+            let totalClicks = 0;
+            
+            filteredData.forEach(item => {
+                const btn = item.buttonName || 'Lain-lain';
+                counts[btn] = (counts[btn] || 0) + 1;
+                totalClicks++;
+            });
+
+            renderDashboardStats(counts, totalClicks);
+        };
+
+        function renderDashboardStats(counts, totalClicks) {
+            document.getElementById('statTotalClicks').innerText = totalClicks;
+            document.getElementById('statTotalButtons').innerText = Object.keys(counts).length;
+
+            const listContainer = document.getElementById('statsListContainer');
+            listContainer.innerHTML = '';
+
+            if (Object.keys(counts).length === 0) {
+                listContainer.innerHTML = '<div class="p-8 text-center text-gray-400 text-sm">Belum ada aktivitas klik pada rentang tanggal tersebut.</div>';
+                return;
             }
+
+            // Urutkan dari yang terbanyak diklik
+            const sortedKeys = Object.keys(counts).sort((a, b) => counts[b] - counts[a]);
+            
+            sortedKeys.forEach((key, index) => {
+                const div = document.createElement('div');
+                div.className = 'px-5 py-3 flex justify-between items-center hover:bg-pink-50 transition-colors';
+                div.innerHTML = `
+                    <div class="flex items-center gap-3">
+                        <span class="text-xs font-bold text-gray-400 w-4">${index + 1}.</span>
+                        <span class="text-sm font-medium text-gray-700">${key}</span>
+                    </div>
+                    <span class="bg-pink-100 text-pink-600 px-3 py-1 rounded-full text-xs font-bold whitespace-nowrap">${counts[key]} klik</span>
+                `;
+                listContainer.appendChild(div);
+            });
         }
+
+        // Tutup modal jika klik di luar area
+        window.onclick = function(event) {
+            if (event.target.id === 'branchModal') window.closeModal('branchModal');
+            if (event.target.id === 'faqModal') window.closeModal('faqModal');
+            if (event.target.id === 'adminAuthModal') window.closeModal('adminAuthModal');
+        };
+
+        // Render tombol cabang awal
+        window.renderBranchButtons();
+
     </script>
 </body>
 </html>
